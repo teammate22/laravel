@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MainController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Главная страница через контроллер
+Route::get('/', [MainController::class, 'index']);
 
+// Старые маршруты (оставляем)
 Route::get('/about', function () {
     return view('about');
 });
@@ -31,3 +32,6 @@ Route::get('/contacts', function () {
 
     return view('contacts', ['contacts' => $contacts]);
 });
+
+// Новый маршрут для галереи
+Route::get('/gallery/{id}', [MainController::class, 'gallery'])->name('gallery');
