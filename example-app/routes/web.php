@@ -5,6 +5,13 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ArticleController;
 
+Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
+Route::get('/news/create', [ArticleController::class, 'create'])->name('news.create');
+Route::post('/news', [ArticleController::class, 'store'])->name('news.store');
+Route::get('/news/{id}', [ArticleController::class, 'show'])->name('news.show');
+Route::get('/news/{id}/edit', [ArticleController::class, 'edit'])->name('news.edit');
+Route::put('/news/{id}', [ArticleController::class, 'update'])->name('news.update');
+Route::delete('/news/{id}', [ArticleController::class, 'destroy'])->name('news.destroy');
 Route::get('/', [MainController::class, 'index']);
 
 Route::get('/about', function () {
@@ -38,5 +45,5 @@ Route::get('/gallery/{id}', [MainController::class, 'gallery'])->name('gallery')
 Route::get('/signin', [AuthController::class, 'create'])->name('signin');
 Route::post('/signin', [AuthController::class, 'registration'])->name('registration');
 
-Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
+Route::get('/news/{id}', [ArticleController::class, 'show'])->name('news.show');

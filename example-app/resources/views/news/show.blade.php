@@ -5,7 +5,7 @@
 @section('content')
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('articles.index') }}">Новости</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('news.index') }}">Новости</a></li>
             <li class="breadcrumb-item active">{{ Str::limit($article->title, 50) }}</li>
         </ol>
     </nav>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="mt-5">
-            <a href="{{ route('articles.index') }}" class="btn btn-secondary">
+            <a href="{{ route('news.index') }}" class="btn btn-secondary">
                 ← Назад к списку новостей
             </a>
         </div>
