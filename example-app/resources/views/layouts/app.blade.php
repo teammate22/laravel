@@ -33,6 +33,7 @@
                     <a class="nav-link" href="/about">О нас</a>
                     <a class="nav-link" href="/contacts">Контакты</a>
                     <a class="nav-link" href="/signin">Регистрация</a>
+                    <a class="nav-link" href="{{ route('articles.index') }}">Новости</a>
                 </div>
             </div>
         </nav>
