@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
 
 Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
 Route::get('/news/create', [ArticleController::class, 'create'])->name('news.create');
@@ -64,4 +65,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/profile', function () {
         return view('profile');
     })->name('profile');
+});
+
+// Комментарии
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/news/{article}/comments', [CommentController::class, 'store'])
+        ->name('comments.store');
+
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])
+        ->name('comments.destroy');
 });

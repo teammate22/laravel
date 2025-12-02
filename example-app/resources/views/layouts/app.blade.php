@@ -33,6 +33,13 @@
                     <a class="nav-link" href="/about">О нас</a>
                     <a class="nav-link" href="/contacts">Контакты</a>
                     <a class="nav-link" href="{{ route('news.index') }}">Новости</a>
+                    @can('create', App\Models\Article::class)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('news.create') }}">
+                                <i class="bi bi-plus-circle"></i> Создать статью
+                            </a>
+                        </li>
+                    @endcan
                     @auth
                         <!-- Показать для авторизованных пользователей -->
                         <li class="nav-item dropdown">

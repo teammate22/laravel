@@ -12,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable, HasApiTokens;
+    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -49,5 +49,59 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    // Отношение к ролям
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    // Проверка роли
+    public function hasRole($role)
+    {
+        if (is_string($role)) {
+            return $this->roles->contains('slug', $role);
+        }
+
+        return false;
+    }
+
+    // Проверка нескольких ролей
+    public function hasAnyRole($roles)
+    {
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if ($this->hasRole($role)) {
+                    return true;
+                }
+            }
+        } else {
+            if ($this->hasRole($roles)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Назначение роли
+    public function assignRole($role)
+    {
+        if (is_string($role)) {
+            $role = Role::where('slug', $role)->firstOrFail();
+        }
+
+        return $this->roles()->syncWithoutDetaching($role);
+    }
+
+    // Удаление роли
+    public function removeRole($role)
+    {
+        if (is_string($role)) {
+            $role = Role::where('slug', $role)->firstOrFail();
+        }
+
+        return $this->roles()->detach($role);
     }
 }

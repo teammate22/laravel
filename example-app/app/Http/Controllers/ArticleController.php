@@ -4,33 +4,43 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Article;
+use Illuminate\Support\Facades\Gate;
 
 class ArticleController extends Controller
 {
     public function index()
     {
-        // Пагинация - 6 статей на страницу
-        $news = Article::published()
+        $articles = Article::published()
             ->latest()
             ->paginate(6);
 
-        return view('news.index', compact('news'));
+        return view('news.index', compact('articles'));
     }
 
     public function show($id)
     {
-        $article = Article::published()->findOrFail($id);
+        $article = Article::published()
+            ->with('comments.user')
+            ->findOrFail($id);
+
         return view('news.show', compact('article'));
     }
 
     public function create()
     {
+        if (!Gate::allows('create', Article::class)) {
+            abort(403, 'У вас нет прав для создания статей');
+        }
+
         return view('news.create');
     }
 
     public function store(Request $request)
     {
-        // Валидация данных
+        if (!Gate::allows('create', Article::class)) {
+            abort(403, 'У вас нет прав для создания статей');
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|min:5|max:255',
             'content' => 'required|string|min:10',
@@ -40,7 +50,6 @@ class ArticleController extends Controller
             'is_published' => 'boolean'
         ]);
 
-        // Создание статьи
         Article::create($validated);
 
         return redirect()->route('news.index')
@@ -50,6 +59,11 @@ class ArticleController extends Controller
     public function edit($id)
     {
         $article = Article::findOrFail($id);
+
+        if (!Gate::allows('update', $article)) {
+            abort(403, 'У вас нет прав для редактирования этой статьи');
+        }
+
         return view('news.edit', compact('article'));
     }
 
@@ -57,7 +71,10 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
 
-        // Валидация данных
+        if (!Gate::allows('update', $article)) {
+            abort(403, 'У вас нет прав для редактирования этой статьи');
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|min:5|max:255',
             'content' => 'required|string|min:10',
@@ -67,7 +84,6 @@ class ArticleController extends Controller
             'is_published' => 'boolean'
         ]);
 
-        // Обновление статьи
         $article->update($validated);
 
         return redirect()->route('news.index')
@@ -77,6 +93,12 @@ class ArticleController extends Controller
     public function destroy($id)
     {
         $article = Article::findOrFail($id);
+
+        // ✅ Проверяем через Gate
+        if (!Gate::allows('delete', $article)) {
+            abort(403, 'У вас нет прав для удаления этой статьи');
+        }
+
         $article->delete();
 
         return redirect()->route('news.index')

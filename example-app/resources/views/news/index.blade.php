@@ -5,9 +5,11 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Последние новости</h1>
-        <a href="{{ route('news.create') }}" class="btn btn-success">
-            + Создать статью
-        </a>
+        @can('create', App\Models\Article::class)
+            <a href="{{ route('news.create') }}" class="btn btn-success">
+                + Создать статью
+            </a>
+        @endcan
     </div>
 
     <!-- Сообщения об успехе -->
@@ -19,7 +21,7 @@
     @endif
 
     <div class="row">
-        @foreach ($news as $article)
+        @foreach ($articles as $article)
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100">
                     @if ($article->preview_image)
@@ -41,19 +43,23 @@
                                 </span>
                             </p>
                             <div class="btn-group w-100">
-                                <a href="{{ route('news.show', $article->id) }}"
-                                    class="btn btn-primary btn-sm">Читать</a>
-                                <a href="{{ route('news.edit', $article->id) }}"
-                                    class="btn btn-warning btn-sm">Редактировать</a>
-                                <form action="{{ route('news.destroy', $article->id) }}" method="POST"
-                                    class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Удалить статью?')">
-                                        Удалить
-                                    </button>
-                                </form>
+                                <a href="{{ route('news.show', $article->id) }}" class="btn btn-primary btn-sm">Читать</a>
+                                @can('update', $article)
+                                    <a href="{{ route('news.edit', $article->id) }}" class="btn btn-warning btn-sm">
+                                        Редактировать
+                                    </a>
+                                @endcan
+                                @can('delete', $article)
+                                    <form action="{{ route('news.destroy', $article->id) }}" method="POST"
+                                        class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Удалить статью?')">
+                                            Удалить
+                                        </button>
+                                    </form>
+                                @endcan
                             </div>
                         </div>
                     </div>
@@ -67,7 +73,7 @@
         <nav aria-label="Page navigation">
             <ul class="pagination">
                 <!-- Стрелка "Назад" -->
-                @if ($news->onFirstPage())
+                @if ($articles->onFirstPage())
                     <li class="page-item disabled">
                         <span class="page-link">&laquo;</span>
                     </li>
@@ -78,8 +84,8 @@
                 @endif
 
                 <!-- Номера страниц -->
-                @foreach ($news->getUrlRange(1, $news->lastPage()) as $page => $url)
-                    @if ($page == $news->currentPage())
+                @foreach ($articles->getUrlRange(1, $articles->lastPage()) as $page => $url)
+                    @if ($page == $articles->currentPage())
                         <li class="page-item active" aria-current="page">
                             <span class="page-link">{{ $page }}</span>
                         </li>
@@ -91,9 +97,9 @@
                 @endforeach
 
                 <!-- Стрелка "Вперед" -->
-                @if ($news->hasMorePages())
+                @if ($articles->hasMorePages())
                     <li class="page-item">
-                        <a class="page-link" href="{{ $news->nextPageUrl() }}" rel="next">&raquo;</a>
+                        <a class="page-link" href="{{ $articles->nextPageUrl() }}" rel="next">&raquo;</a>
                     </li>
                 @else
                     <li class="page-item disabled">
@@ -104,7 +110,7 @@
         </nav>
     </div>
 
-    @if ($news->isEmpty())
+    @if ($articles->isEmpty())
         <div class="alert alert-info">
             Новости пока отсутствуют.
             <a href="{{ route('news.create') }}">Создайте первую статью!</a>

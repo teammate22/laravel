@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Models\User;
-use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -43,6 +42,14 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $readerRole = \App\Models\Role::where('slug', 'reader')->first();
+        if ($readerRole) {
+            $user->roles()->attach($readerRole->id);
+            \Log::info("User {$user->email} assigned reader role");
+        } else {
+            \Log::error('Reader role not found in database!');
+        }
 
         // Редирект на форму авторизации с сообщением
         return redirect()->route('login')

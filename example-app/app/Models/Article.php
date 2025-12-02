@@ -34,4 +34,9 @@ class Article extends Model
     {
         return $query->orderBy('created_at', 'desc')->limit($limit);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
