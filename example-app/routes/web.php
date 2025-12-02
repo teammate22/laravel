@@ -47,3 +47,21 @@ Route::post('/signin', [AuthController::class, 'registration'])->name('registrat
 
 Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
 Route::get('/news/{id}', [ArticleController::class, 'show'])->name('news.show');
+
+// Аутентификация
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Защищенные маршруты
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/profile', function () {
+        return view('profile');
+    })->name('profile');
+});

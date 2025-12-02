@@ -32,8 +32,31 @@
                     <a class="nav-link" href="/">Главная</a>
                     <a class="nav-link" href="/about">О нас</a>
                     <a class="nav-link" href="/contacts">Контакты</a>
-                    <a class="nav-link" href="/signin">Регистрация</a>
                     <a class="nav-link" href="{{ route('news.index') }}">Новости</a>
+                    @auth
+                        <!-- Показать для авторизованных пользователей -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                {{ Auth::user()->name }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('profile') }}">Профиль</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">Выйти</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @else
+                        <!-- Показать для гостей -->
+                        <a class="nav-link" href="{{ route('login') }}">Войти</a>
+                        <a class="nav-link" href="{{ route('register') }}">Регистрация</a>
+                    @endauth
                 </div>
             </div>
         </nav>
@@ -48,6 +71,7 @@
             Варушкин Тимофей, 241-3210
         </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
