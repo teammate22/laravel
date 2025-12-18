@@ -1,13 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MainController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
-use App\Models\Article;
-use App\Mail\NewArticleNotification;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\MainController;
+use App\Http\Controllers\UserCommentController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
 Route::get('/news/create', [ArticleController::class, 'create'])->name('news.create');
@@ -27,18 +25,18 @@ Route::get('/contacts', function () {
         [
             'name' => 'Иван Иванов',
             'phone' => '+7 (999) 123-45-67',
-            'email' => 'ivan@example.com'
+            'email' => 'ivan@example.com',
         ],
         [
             'name' => 'Петр Петров',
             'phone' => '+7 (999) 765-43-21',
-            'email' => 'petr@example.com'
+            'email' => 'petr@example.com',
         ],
         [
             'name' => 'Мария Сидорова',
             'phone' => '+7 (999) 555-55-55',
-            'email' => 'maria@example.com'
-        ]
+            'email' => 'maria@example.com',
+        ],
     ];
 
     return view('contacts', ['contacts' => $contacts]);
@@ -77,4 +75,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])
         ->name('comments.destroy');
+});
+
+// Модерация комментариев (только для модераторов)
+Route::middleware(['can:manage-comments'])->group(function () {
+    Route::get('/comments/moderation', [CommentController::class, 'moderationIndex'])
+        ->name('comments.moderation');
+
+    Route::post('/comments/{comment}/approve', [CommentController::class, 'approve'])
+        ->name('comments.approve');
+
+    Route::post('/comments/{comment}/reject', [CommentController::class, 'reject'])
+        ->name('comments.reject');
+});
+
+// Комментарии пользователя
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/my-comments', [UserCommentController::class, 'myComments'])
+        ->name('my.comments');
 });

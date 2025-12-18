@@ -41,7 +41,31 @@
                         </li>
                     @endcan
                     @auth
+                        @can('manage-comments')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('comments.moderation') }}">
+                                    <i class="bi bi-shield-check"></i> Модерация
+                                    @php
+                                        $pendingCount = \App\Models\Comment::pending()->count();
+                                    @endphp
+                                    @if ($pendingCount > 0)
+                                        <span class="badge bg-danger rounded-pill">{{ $pendingCount }}</span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endcan
                         <!-- Показать для авторизованных пользователей -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('my.comments') }}">
+                                <i class="bi bi-chat-text"></i> Мои комментарии
+                                @php
+                                    $myRejectedCount = auth()->user()->rejectedComments()->count();
+                                @endphp
+                                @if ($myRejectedCount > 0)
+                                    <span class="badge bg-danger rounded-pill">{{ $myRejectedCount }}</span>
+                                @endif
+                            </a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 {{ Auth::user()->name }}

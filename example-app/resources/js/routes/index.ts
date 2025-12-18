@@ -441,7 +441,7 @@ registration.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     
     registration.form = registrationForm
 /**
- * @see routes/web.php:68
+ * @see routes/web.php:65
  * @route '/profile'
  */
 export const profile = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -455,7 +455,7 @@ profile.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
- * @see routes/web.php:68
+ * @see routes/web.php:65
  * @route '/profile'
  */
 profile.url = (options?: RouteQueryOptions) => {
@@ -463,7 +463,7 @@ profile.url = (options?: RouteQueryOptions) => {
 }
 
 /**
- * @see routes/web.php:68
+ * @see routes/web.php:65
  * @route '/profile'
  */
 profile.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -471,7 +471,7 @@ profile.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     method: 'get',
 })
 /**
- * @see routes/web.php:68
+ * @see routes/web.php:65
  * @route '/profile'
  */
 profile.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -480,7 +480,7 @@ profile.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
     /**
- * @see routes/web.php:68
+ * @see routes/web.php:65
  * @route '/profile'
  */
     const profileForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -489,7 +489,7 @@ profile.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     })
 
             /**
- * @see routes/web.php:68
+ * @see routes/web.php:65
  * @route '/profile'
  */
         profileForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -497,7 +497,7 @@ profile.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             method: 'get',
         })
             /**
- * @see routes/web.php:68
+ * @see routes/web.php:65
  * @route '/profile'
  */
         profileForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

@@ -104,4 +104,15 @@ class User extends Authenticatable
 
         return $this->roles()->detach($role);
     }
+
+    // Статус комментария
+    public function rejectedComments()
+    {
+        return $this->hasMany(Comment::class)->rejected()->latest();
+    }
+
+    public function pendingComments()
+    {
+        return $this->hasMany(Comment::class)->pending()->latest();
+    }
 }

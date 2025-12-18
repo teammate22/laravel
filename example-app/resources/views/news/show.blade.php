@@ -48,8 +48,16 @@
                     <div class="mb-3">
                         <label for="content" class="form-label">Добавить комментарий</label>
                         <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+                        <div class="form-text text-muted">
+                            <small>
+                                <i class="bi bi-info-circle"></i>
+                                Все комментарии проходят модерацию перед публикацией
+                            </small>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Отправить</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send"></i> Отправить на модерацию
+                    </button>
                 </form>
             @else
                 <div class="alert alert-info">
@@ -64,37 +72,48 @@
 
         <!-- Список комментариев -->
         @php
-            $commentsCount = optional($article->comments)->count() ?? 0;
+            // Показываем только ОДОБРЕННЫЕ комментарии
+            $approvedComments = $article->comments()->approved()->get();
+            $commentsCount = $approvedComments->count();
         @endphp
 
         @if ($commentsCount > 0)
-            <div class="list-group">
-                @foreach ($article->comments as $comment)
+            <div class="list-group mt-3">
+                @foreach ($approvedComments as $comment)
                     <div class="list-group-item">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <strong>{{ optional($comment->user)->name ?? 'Аноним' }}</strong>
-                                <small class="text-muted">{{ $comment->created_at->format('d.m.Y H:i') }}</small>
+                                <strong>{{ $comment->user->name ?? 'Аноним' }}</strong>
+                                <small class="text-muted ms-2">
+                                    {{ $comment->created_at->format('d.m.Y H:i') }}
+                                </small>
+                                @if ($comment->moderated_at)
+                                    <span class="badge bg-success ms-2" title="Проверено модератором">
+                                        <i class="bi bi-shield-check"></i>
+                                        Проверено модератором
+                                    </span>
+                                @endif
                             </div>
 
-                            <!-- Кнопка удаления комментария -->
+                            <!-- Кнопка удаления комментария (только для модераторов) -->
                             @can('manage-comments')
                                 <form action="{{ route('comments.destroy', $comment->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger"
                                         onclick="return confirm('Удалить комментарий?')">
+                                        <i class="bi bi-trash"></i>
                                         Удалить
                                     </button>
                                 </form>
                             @endcan
                         </div>
-                        <p class="mt-2">{{ $comment->content }}</p>
+                        <p class="mt-2 mb-0">{{ $comment->content }}</p>
                     </div>
                 @endforeach
             </div>
         @else
-            <p class="text-muted">Комментариев пока нет</p>
+            <p class="text-muted mt-3">Комментариев пока нет</p>
         @endif
     </div>
 @endsection
