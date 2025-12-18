@@ -1,6 +1,12 @@
-import Settings from './Settings'
+import AuthController from './AuthController'
+import ArticleController from './ArticleController'
+import MainController from './MainController'
+import CommentController from './CommentController'
 const Controllers = {
-    Settings: Object.assign(Settings, Settings),
+    AuthController: Object.assign(AuthController, AuthController),
+ArticleController: Object.assign(ArticleController, ArticleController),
+MainController: Object.assign(MainController, MainController),
+CommentController: Object.assign(CommentController, CommentController),
 }
 
 export default Controllers

@@ -1,8 +1,8 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
-* @see \App\Http\Controllers\Settings\TwoFactorAuthenticationController::show
- * @see app/Http/Controllers/Settings/TwoFactorAuthenticationController.php:28
- * @route '/settings/two-factor'
+* @see \Laravel\Sanctum\Http\Controllers\CsrfCookieController::show
+ * @see vendor/laravel/sanctum/src/Http/Controllers/CsrfCookieController.php:17
+ * @route '/sanctum/csrf-cookie'
  */
 export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(options),
@@ -11,31 +11,31 @@ export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 show.definition = {
     methods: ["get","head"],
-    url: '/settings/two-factor',
+    url: '/sanctum/csrf-cookie',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\Settings\TwoFactorAuthenticationController::show
- * @see app/Http/Controllers/Settings/TwoFactorAuthenticationController.php:28
- * @route '/settings/two-factor'
+* @see \Laravel\Sanctum\Http\Controllers\CsrfCookieController::show
+ * @see vendor/laravel/sanctum/src/Http/Controllers/CsrfCookieController.php:17
+ * @route '/sanctum/csrf-cookie'
  */
 show.url = (options?: RouteQueryOptions) => {
     return show.definition.url + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\Settings\TwoFactorAuthenticationController::show
- * @see app/Http/Controllers/Settings/TwoFactorAuthenticationController.php:28
- * @route '/settings/two-factor'
+* @see \Laravel\Sanctum\Http\Controllers\CsrfCookieController::show
+ * @see vendor/laravel/sanctum/src/Http/Controllers/CsrfCookieController.php:17
+ * @route '/sanctum/csrf-cookie'
  */
 show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(options),
     method: 'get',
 })
 /**
-* @see \App\Http\Controllers\Settings\TwoFactorAuthenticationController::show
- * @see app/Http/Controllers/Settings/TwoFactorAuthenticationController.php:28
- * @route '/settings/two-factor'
+* @see \Laravel\Sanctum\Http\Controllers\CsrfCookieController::show
+ * @see vendor/laravel/sanctum/src/Http/Controllers/CsrfCookieController.php:17
+ * @route '/sanctum/csrf-cookie'
  */
 show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(options),
@@ -43,9 +43,9 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
     /**
-* @see \App\Http\Controllers\Settings\TwoFactorAuthenticationController::show
- * @see app/Http/Controllers/Settings/TwoFactorAuthenticationController.php:28
- * @route '/settings/two-factor'
+* @see \Laravel\Sanctum\Http\Controllers\CsrfCookieController::show
+ * @see vendor/laravel/sanctum/src/Http/Controllers/CsrfCookieController.php:17
+ * @route '/sanctum/csrf-cookie'
  */
     const showForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
         action: show.url(options),
@@ -53,18 +53,18 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     })
 
             /**
-* @see \App\Http\Controllers\Settings\TwoFactorAuthenticationController::show
- * @see app/Http/Controllers/Settings/TwoFactorAuthenticationController.php:28
- * @route '/settings/two-factor'
+* @see \Laravel\Sanctum\Http\Controllers\CsrfCookieController::show
+ * @see vendor/laravel/sanctum/src/Http/Controllers/CsrfCookieController.php:17
+ * @route '/sanctum/csrf-cookie'
  */
         showForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
             action: show.url(options),
             method: 'get',
         })
             /**
-* @see \App\Http\Controllers\Settings\TwoFactorAuthenticationController::show
- * @see app/Http/Controllers/Settings/TwoFactorAuthenticationController.php:28
- * @route '/settings/two-factor'
+* @see \Laravel\Sanctum\Http\Controllers\CsrfCookieController::show
+ * @see vendor/laravel/sanctum/src/Http/Controllers/CsrfCookieController.php:17
+ * @route '/sanctum/csrf-cookie'
  */
         showForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
             action: show.url({
@@ -77,6 +77,6 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
         })
     
     show.form = showForm
-const TwoFactorAuthenticationController = { show }
+const CsrfCookieController = { show }
 
-export default TwoFactorAuthenticationController
+export default CsrfCookieController

@@ -5,6 +5,9 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
+use App\Models\Article;
+use App\Mail\NewArticleNotification;
+use Illuminate\Support\Facades\Mail;
 
 Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
 Route::get('/news/create', [ArticleController::class, 'create'])->name('news.create');

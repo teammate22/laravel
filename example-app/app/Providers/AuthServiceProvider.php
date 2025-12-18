@@ -25,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // ✅ Gate::before - возвращаем null для продолжения
+        // Gate::before - возвращаем null для продолжения
         Gate::before(function (User $user, $ability) {
             // Если пользователь модератор И ability не 'create-comment' - разрешаем
             if ($user->hasRole('moderator') && $ability !== 'create-comment') {
@@ -41,17 +41,17 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasAnyRole(['reader', 'moderator']);
         });
 
-        // ✅ Шлюз для проверки роли читателя
+        // Шлюз для проверки роли читателя
         Gate::define('is-reader', function (User $user) {
             return $user->hasRole('reader');
         });
 
-        // ✅ Шлюз для проверки роли модератора
+        // Шлюз для проверки роли модератора
         Gate::define('is-moderator', function (User $user) {
             return $user->hasRole('moderator');
         });
 
-        // ✅ Шлюз для управления комментариями
+        // Шлюз для управления комментариями
         Gate::define('manage-comments', function (User $user) {
             // Только модератор может управлять комментариями
             return $user->hasRole('moderator');

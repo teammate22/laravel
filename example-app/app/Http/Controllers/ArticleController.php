@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Mail\NewArticleNotification;
 use App\Models\Article;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class ArticleController extends Controller
 {
@@ -28,7 +31,7 @@ class ArticleController extends Controller
 
     public function create()
     {
-        if (!Gate::allows('create', Article::class)) {
+        if (! Gate::allows('create', Article::class)) {
             abort(403, 'У вас нет прав для создания статей');
         }
 
@@ -37,7 +40,7 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
-        if (!Gate::allows('create', Article::class)) {
+        if (! Gate::allows('create', Article::class)) {
             abort(403, 'У вас нет прав для создания статей');
         }
 
@@ -47,20 +50,38 @@ class ArticleController extends Controller
             'author' => 'required|string|max:100',
             'preview_image' => 'nullable|url',
             'full_image' => 'nullable|url',
-            'is_published' => 'boolean'
+            'is_published' => 'boolean',
         ]);
 
-        Article::create($validated);
+        $article = Article::create($validated);
+
+        try {
+            // Находим всех модераторов
+            $moderators = User::whereHas('roles', function ($query) {
+                $query->where('slug', 'moderator');
+            })->get();
+
+            // Отправляем каждому модератору
+            foreach ($moderators as $moderator) {
+                Mail::to($moderator->email)->send(new NewArticleNotification($article));
+            }
+
+            \Log::info("Email отправлен модераторам о новой статье: {$article->title}");
+
+        } catch (\Exception $e) {
+            \Log::error('Ошибка отправки email: '.$e->getMessage());
+            // Не прерываем выполнение если email не отправился
+        }
 
         return redirect()->route('news.index')
-            ->with('success', 'Статья успешно создана!');
+            ->with('success', 'Статья успешно создана! Email отправлен модераторам.');
     }
 
     public function edit($id)
     {
         $article = Article::findOrFail($id);
 
-        if (!Gate::allows('update', $article)) {
+        if (! Gate::allows('update', $article)) {
             abort(403, 'У вас нет прав для редактирования этой статьи');
         }
 
@@ -71,7 +92,7 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
 
-        if (!Gate::allows('update', $article)) {
+        if (! Gate::allows('update', $article)) {
             abort(403, 'У вас нет прав для редактирования этой статьи');
         }
 
@@ -81,7 +102,7 @@ class ArticleController extends Controller
             'author' => 'required|string|max:100',
             'preview_image' => 'nullable|url',
             'full_image' => 'nullable|url',
-            'is_published' => 'boolean'
+            'is_published' => 'boolean',
         ]);
 
         $article->update($validated);
@@ -95,7 +116,7 @@ class ArticleController extends Controller
         $article = Article::findOrFail($id);
 
         // ✅ Проверяем через Gate
-        if (!Gate::allows('delete', $article)) {
+        if (! Gate::allows('delete', $article)) {
             abort(403, 'У вас нет прав для удаления этой статьи');
         }
 
