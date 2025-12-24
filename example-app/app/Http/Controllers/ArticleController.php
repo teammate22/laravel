@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\User;
 use App\Notifications\NewArticleNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
 
@@ -15,18 +16,27 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::published()
-            ->latest()
-            ->paginate(6);
+        $page = request()->get('page', 1);
+        $cacheKey = "articles_page_{$page}";
+
+        $articles = Cache::remember($cacheKey, 60, function () {
+            return Article::published()
+                ->latest()
+                ->paginate(6);
+        });
 
         return view('news.index', compact('articles'));
     }
 
     public function show($id)
     {
-        $article = Article::published()
-            ->with('comments.user')
-            ->findOrFail($id);
+        $cacheKey = "article_{$id}";
+
+        $article = Cache::rememberForever($cacheKey, function () use ($id) {
+            return Article::published()
+                ->with('comments.user')
+                ->findOrFail($id);
+        });
 
         return view('news.show', compact('article'));
     }
@@ -57,6 +67,12 @@ class ArticleController extends Controller
 
         $article = Article::create($validated);
         event(new \App\Events\NewArticleEvent($article));
+
+        // Очищаем кэш для всех страниц статей
+        $totalPages = ceil(Article::published()->count() / 6);
+        for ($i = 1; $i <= $totalPages; $i++) {
+            Cache::forget("articles_page_{$i}");
+        }
 
         $users = User::where('id', '!=', auth()->id())->get();
 
@@ -109,6 +125,10 @@ class ArticleController extends Controller
 
         $article->update($validated);
 
+        // Очищаем кэш
+        Cache::forget("article_{$id}");
+        Cache::flush();
+
         return redirect()->route('news.index')
             ->with('success', 'Статья успешно обновлена!');
     }
@@ -117,12 +137,16 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
 
-        // ✅ Проверяем через Gate
+        // Проверяем через Gate
         if (! Gate::allows('delete', $article)) {
             abort(403, 'У вас нет прав для удаления этой статьи');
         }
 
         $article->delete();
+
+        // Очищаем кэш
+        Cache::forget("article_{$id}");
+        Cache::flush();
 
         return redirect()->route('news.index')
             ->with('success', 'Статья успешно удалена!');
