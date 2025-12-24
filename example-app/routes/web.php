@@ -6,6 +6,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\UserCommentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationController;
 
 // Главная и статические страницы
 Route::get('/', [MainController::class, 'index'])->name('home');
@@ -50,4 +51,10 @@ Route::middleware(['can:manage-comments'])->group(function () {
     Route::get('/comments/moderation', [CommentController::class, 'moderationIndex'])->name('comments.moderation');
     Route::post('/comments/{comment}/approve', [CommentController::class, 'approve'])->name('comments.approve');
     Route::post('/comments/{comment}/reject', [CommentController::class, 'reject'])->name('comments.reject');
+});
+
+// Уведомления
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/notifications/read/{id}', [NotificationController::class, 'read'])->name('notifications.read');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 });

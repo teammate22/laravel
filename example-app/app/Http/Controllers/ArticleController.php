@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Jobs\SendNewArticleNotification;
 use App\Jobs\VeryLongJob;
 use App\Models\Article;
+use App\Models\User;
+use App\Notifications\NewArticleNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Notification;
 
 class ArticleController extends Controller
 {
@@ -54,6 +57,11 @@ class ArticleController extends Controller
 
         $article = Article::create($validated);
         event(new \App\Events\NewArticleEvent($article));
+
+        $users = User::where('id', '!=', auth()->id())->get();
+
+        // Отправляем уведомление
+        Notification::sendNow($users, new NewArticleNotification($article));
 
         SendNewArticleNotification::dispatch($article)
             ->delay(now()->addSeconds(5)) // Отложенная отправка на 5 секунд

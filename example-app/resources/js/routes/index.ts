@@ -542,7 +542,7 @@ gallery.head = (args: { id: string | number } | [id: string | number ] | string 
     
     gallery.form = galleryForm
 /**
- * @see routes/web.php:39
+ * @see routes/web.php:40
  * @route '/profile'
  */
 export const profile = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -556,7 +556,7 @@ profile.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
- * @see routes/web.php:39
+ * @see routes/web.php:40
  * @route '/profile'
  */
 profile.url = (options?: RouteQueryOptions) => {
@@ -564,7 +564,7 @@ profile.url = (options?: RouteQueryOptions) => {
 }
 
 /**
- * @see routes/web.php:39
+ * @see routes/web.php:40
  * @route '/profile'
  */
 profile.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -572,7 +572,7 @@ profile.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     method: 'get',
 })
 /**
- * @see routes/web.php:39
+ * @see routes/web.php:40
  * @route '/profile'
  */
 profile.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -581,7 +581,7 @@ profile.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
     /**
- * @see routes/web.php:39
+ * @see routes/web.php:40
  * @route '/profile'
  */
     const profileForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -590,7 +590,7 @@ profile.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     })
 
             /**
- * @see routes/web.php:39
+ * @see routes/web.php:40
  * @route '/profile'
  */
         profileForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -598,7 +598,7 @@ profile.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             method: 'get',
         })
             /**
- * @see routes/web.php:39
+ * @see routes/web.php:40
  * @route '/profile'
  */
         profileForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

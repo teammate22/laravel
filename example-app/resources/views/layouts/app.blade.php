@@ -68,6 +68,44 @@
                                 @endif
                             </a>
                         </li>
+
+                        <!-- Notifications Dropdown -->
+                        @php
+                            $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+                            $unreadCount = auth()->user()->unreadNotifications()->count();
+                        @endphp
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                Уведомления
+                                @if ($unreadCount > 0)
+                                    <span class="badge bg-danger rounded-pill">{{ $unreadCount }}</span>
+                                @endif
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                @forelse($notifications as $notification)
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="{{ route('news.show', ['article' => $notification->data['article_id']]) }}"
+                                            onclick="event.preventDefault(); document.getElementById('mark-as-read-{{ $notification->id }}').submit();">
+                                            {{ $notification->data['title'] }}
+                                        </a>
+                                        <form id="mark-as-read-{{ $notification->id }}"
+                                            action="{{ route('notifications.read', $notification->id) }}" method="GET"
+                                            class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                @empty
+                                    <li class="dropdown-item">Нет новых уведомлений</li>
+                                @endforelse
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{{ route('notifications.index') }}">Все уведомления</a>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 {{ Auth::user()->name }}
