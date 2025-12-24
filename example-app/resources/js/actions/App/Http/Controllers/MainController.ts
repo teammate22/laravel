@@ -78,8 +78,86 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     
     index.form = indexForm
 /**
-* @see \App\Http\Controllers\MainController::gallery
+* @see \App\Http\Controllers\MainController::contacts
  * @see app/Http/Controllers/MainController.php:26
+ * @route '/contacts'
+ */
+export const contacts = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: contacts.url(options),
+    method: 'get',
+})
+
+contacts.definition = {
+    methods: ["get","head"],
+    url: '/contacts',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\MainController::contacts
+ * @see app/Http/Controllers/MainController.php:26
+ * @route '/contacts'
+ */
+contacts.url = (options?: RouteQueryOptions) => {
+    return contacts.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\MainController::contacts
+ * @see app/Http/Controllers/MainController.php:26
+ * @route '/contacts'
+ */
+contacts.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: contacts.url(options),
+    method: 'get',
+})
+/**
+* @see \App\Http\Controllers\MainController::contacts
+ * @see app/Http/Controllers/MainController.php:26
+ * @route '/contacts'
+ */
+contacts.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: contacts.url(options),
+    method: 'head',
+})
+
+    /**
+* @see \App\Http\Controllers\MainController::contacts
+ * @see app/Http/Controllers/MainController.php:26
+ * @route '/contacts'
+ */
+    const contactsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: contacts.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \App\Http\Controllers\MainController::contacts
+ * @see app/Http/Controllers/MainController.php:26
+ * @route '/contacts'
+ */
+        contactsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: contacts.url(options),
+            method: 'get',
+        })
+            /**
+* @see \App\Http\Controllers\MainController::contacts
+ * @see app/Http/Controllers/MainController.php:26
+ * @route '/contacts'
+ */
+        contactsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: contacts.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    contacts.form = contactsForm
+/**
+* @see \App\Http\Controllers\MainController::gallery
+ * @see app/Http/Controllers/MainController.php:49
  * @route '/gallery/{id}'
  */
 export const gallery = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -94,7 +172,7 @@ gallery.definition = {
 
 /**
 * @see \App\Http\Controllers\MainController::gallery
- * @see app/Http/Controllers/MainController.php:26
+ * @see app/Http/Controllers/MainController.php:49
  * @route '/gallery/{id}'
  */
 gallery.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -122,7 +200,7 @@ gallery.url = (args: { id: string | number } | [id: string | number ] | string |
 
 /**
 * @see \App\Http\Controllers\MainController::gallery
- * @see app/Http/Controllers/MainController.php:26
+ * @see app/Http/Controllers/MainController.php:49
  * @route '/gallery/{id}'
  */
 gallery.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -131,7 +209,7 @@ gallery.get = (args: { id: string | number } | [id: string | number ] | string |
 })
 /**
 * @see \App\Http\Controllers\MainController::gallery
- * @see app/Http/Controllers/MainController.php:26
+ * @see app/Http/Controllers/MainController.php:49
  * @route '/gallery/{id}'
  */
 gallery.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -141,7 +219,7 @@ gallery.head = (args: { id: string | number } | [id: string | number ] | string 
 
     /**
 * @see \App\Http\Controllers\MainController::gallery
- * @see app/Http/Controllers/MainController.php:26
+ * @see app/Http/Controllers/MainController.php:49
  * @route '/gallery/{id}'
  */
     const galleryForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -151,7 +229,7 @@ gallery.head = (args: { id: string | number } | [id: string | number ] | string 
 
             /**
 * @see \App\Http\Controllers\MainController::gallery
- * @see app/Http/Controllers/MainController.php:26
+ * @see app/Http/Controllers/MainController.php:49
  * @route '/gallery/{id}'
  */
         galleryForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -160,7 +238,7 @@ gallery.head = (args: { id: string | number } | [id: string | number ] | string 
         })
             /**
 * @see \App\Http\Controllers\MainController::gallery
- * @see app/Http/Controllers/MainController.php:26
+ * @see app/Http/Controllers/MainController.php:49
  * @route '/gallery/{id}'
  */
         galleryForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -174,6 +252,6 @@ gallery.head = (args: { id: string | number } | [id: string | number ] | string 
         })
     
     gallery.form = galleryForm
-const MainController = { index, gallery }
+const MainController = { index, contacts, gallery }
 
 export default MainController

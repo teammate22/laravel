@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 /**
-* @see \UserCommentController::comments
- * @see [unknown]:0
+* @see \App\Http\Controllers\UserCommentController::comments
+ * @see app/Http/Controllers/UserCommentController.php:10
  * @route '/my-comments'
  */
 export const comments = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -15,8 +15,8 @@ comments.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \UserCommentController::comments
- * @see [unknown]:0
+* @see \App\Http\Controllers\UserCommentController::comments
+ * @see app/Http/Controllers/UserCommentController.php:10
  * @route '/my-comments'
  */
 comments.url = (options?: RouteQueryOptions) => {
@@ -24,8 +24,8 @@ comments.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \UserCommentController::comments
- * @see [unknown]:0
+* @see \App\Http\Controllers\UserCommentController::comments
+ * @see app/Http/Controllers/UserCommentController.php:10
  * @route '/my-comments'
  */
 comments.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -33,8 +33,8 @@ comments.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     method: 'get',
 })
 /**
-* @see \UserCommentController::comments
- * @see [unknown]:0
+* @see \App\Http\Controllers\UserCommentController::comments
+ * @see app/Http/Controllers/UserCommentController.php:10
  * @route '/my-comments'
  */
 comments.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -43,8 +43,8 @@ comments.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
     /**
-* @see \UserCommentController::comments
- * @see [unknown]:0
+* @see \App\Http\Controllers\UserCommentController::comments
+ * @see app/Http/Controllers/UserCommentController.php:10
  * @route '/my-comments'
  */
     const commentsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -53,8 +53,8 @@ comments.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     })
 
             /**
-* @see \UserCommentController::comments
- * @see [unknown]:0
+* @see \App\Http\Controllers\UserCommentController::comments
+ * @see app/Http/Controllers/UserCommentController.php:10
  * @route '/my-comments'
  */
         commentsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -62,8 +62,8 @@ comments.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             method: 'get',
         })
             /**
-* @see \UserCommentController::comments
- * @see [unknown]:0
+* @see \App\Http\Controllers\UserCommentController::comments
+ * @see app/Http/Controllers/UserCommentController.php:10
  * @route '/my-comments'
  */
         commentsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

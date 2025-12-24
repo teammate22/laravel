@@ -1,12 +1,14 @@
 import AuthController from './AuthController'
-import ArticleController from './ArticleController'
 import MainController from './MainController'
+import ArticleController from './ArticleController'
 import CommentController from './CommentController'
+import UserCommentController from './UserCommentController'
 const Controllers = {
     AuthController: Object.assign(AuthController, AuthController),
-ArticleController: Object.assign(ArticleController, ArticleController),
 MainController: Object.assign(MainController, MainController),
+ArticleController: Object.assign(ArticleController, ArticleController),
 CommentController: Object.assign(CommentController, CommentController),
+UserCommentController: Object.assign(UserCommentController, UserCommentController),
 }
 
 export default Controllers

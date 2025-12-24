@@ -75,7 +75,7 @@ store.post = (args: { article: string | number } | [article: string | number ] |
     store.form = storeForm
 /**
 * @see \App\Http\Controllers\CommentController::destroy
- * @see app/Http/Controllers/CommentController.php:120
+ * @see app/Http/Controllers/CommentController.php:117
  * @route '/comments/{comment}'
  */
 export const destroy = (args: { comment: string | number } | [comment: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -90,7 +90,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::destroy
- * @see app/Http/Controllers/CommentController.php:120
+ * @see app/Http/Controllers/CommentController.php:117
  * @route '/comments/{comment}'
  */
 destroy.url = (args: { comment: string | number } | [comment: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -118,7 +118,7 @@ destroy.url = (args: { comment: string | number } | [comment: string | number ] 
 
 /**
 * @see \App\Http\Controllers\CommentController::destroy
- * @see app/Http/Controllers/CommentController.php:120
+ * @see app/Http/Controllers/CommentController.php:117
  * @route '/comments/{comment}'
  */
 destroy.delete = (args: { comment: string | number } | [comment: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -128,7 +128,7 @@ destroy.delete = (args: { comment: string | number } | [comment: string | number
 
     /**
 * @see \App\Http\Controllers\CommentController::destroy
- * @see app/Http/Controllers/CommentController.php:120
+ * @see app/Http/Controllers/CommentController.php:117
  * @route '/comments/{comment}'
  */
     const destroyForm = (args: { comment: string | number } | [comment: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -143,7 +143,7 @@ destroy.delete = (args: { comment: string | number } | [comment: string | number
 
             /**
 * @see \App\Http\Controllers\CommentController::destroy
- * @see app/Http/Controllers/CommentController.php:120
+ * @see app/Http/Controllers/CommentController.php:117
  * @route '/comments/{comment}'
  */
         destroyForm.delete = (args: { comment: string | number } | [comment: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

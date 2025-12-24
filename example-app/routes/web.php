@@ -7,50 +7,22 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\UserCommentController;
 use Illuminate\Support\Facades\Route;
 
+// Главная и статические страницы
+Route::get('/', [MainController::class, 'index'])->name('home');
+Route::view('/about', 'about')->name('about');
+Route::get('/contacts', [MainController::class, 'contacts'])->name('contacts');
+Route::get('/gallery/{id}', [MainController::class, 'gallery'])->name('gallery');
+
+// Статьи (используем route model binding: {article})
 Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
 Route::get('/news/create', [ArticleController::class, 'create'])->name('news.create');
 Route::post('/news', [ArticleController::class, 'store'])->name('news.store');
-Route::get('/news/{id}', [ArticleController::class, 'show'])->name('news.show');
-Route::get('/news/{id}/edit', [ArticleController::class, 'edit'])->name('news.edit');
-Route::put('/news/{id}', [ArticleController::class, 'update'])->name('news.update');
-Route::delete('/news/{id}', [ArticleController::class, 'destroy'])->name('news.destroy');
-Route::get('/', [MainController::class, 'index']);
+Route::get('/news/{article}', [ArticleController::class, 'show'])->name('news.show');
+Route::get('/news/{article}/edit', [ArticleController::class, 'edit'])->name('news.edit');
+Route::put('/news/{article}', [ArticleController::class, 'update'])->name('news.update');
+Route::delete('/news/{article}', [ArticleController::class, 'destroy'])->name('news.destroy');
 
-Route::get('/about', function () {
-    return view('about');
-});
-
-Route::get('/contacts', function () {
-    $contacts = [
-        [
-            'name' => 'Иван Иванов',
-            'phone' => '+7 (999) 123-45-67',
-            'email' => 'ivan@example.com',
-        ],
-        [
-            'name' => 'Петр Петров',
-            'phone' => '+7 (999) 765-43-21',
-            'email' => 'petr@example.com',
-        ],
-        [
-            'name' => 'Мария Сидорова',
-            'phone' => '+7 (999) 555-55-55',
-            'email' => 'maria@example.com',
-        ],
-    ];
-
-    return view('contacts', ['contacts' => $contacts]);
-});
-
-Route::get('/gallery/{id}', [MainController::class, 'gallery'])->name('gallery');
-
-Route::get('/signin', [AuthController::class, 'create'])->name('signin');
-Route::post('/signin', [AuthController::class, 'registration'])->name('registration');
-
-Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
-Route::get('/news/{id}', [ArticleController::class, 'show'])->name('news.show');
-
-// Аутентификация
+// Аутентификация — гостевые страницы
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
@@ -59,38 +31,23 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
+// Выход
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Защищенные маршруты
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/profile', function () {
-        return view('profile');
-    })->name('profile');
+// Защищённые маршруты (для авторизованных пользователей)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', fn () => view('profile'))->name('profile');
+
+    // Комментарии (создание / удаление пользователем)
+    Route::post('/news/{article}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    Route::get('/my-comments', [UserCommentController::class, 'myComments'])->name('my.comments');
 });
 
-// Комментарии
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('/news/{article}/comments', [CommentController::class, 'store'])
-        ->name('comments.store');
-
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])
-        ->name('comments.destroy');
-});
-
-// Модерация комментариев (только для модераторов)
+// Модерация — только для пользователей с разрешением manage-comments
 Route::middleware(['can:manage-comments'])->group(function () {
-    Route::get('/comments/moderation', [CommentController::class, 'moderationIndex'])
-        ->name('comments.moderation');
-
-    Route::post('/comments/{comment}/approve', [CommentController::class, 'approve'])
-        ->name('comments.approve');
-
-    Route::post('/comments/{comment}/reject', [CommentController::class, 'reject'])
-        ->name('comments.reject');
-});
-
-// Комментарии пользователя
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/my-comments', [UserCommentController::class, 'myComments'])
-        ->name('my.comments');
+    Route::get('/comments/moderation', [CommentController::class, 'moderationIndex'])->name('comments.moderation');
+    Route::post('/comments/{comment}/approve', [CommentController::class, 'approve'])->name('comments.approve');
+    Route::post('/comments/{comment}/reject', [CommentController::class, 'reject'])->name('comments.reject');
 });

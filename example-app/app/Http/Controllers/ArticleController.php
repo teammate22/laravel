@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\NewArticleNotification;
+use App\Jobs\SendNewArticleNotification;
+use App\Jobs\VeryLongJob;
 use App\Models\Article;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Mail;
 
 class ArticleController extends Controller
 {
@@ -54,24 +53,19 @@ class ArticleController extends Controller
         ]);
 
         $article = Article::create($validated);
+        event(new \App\Events\NewArticleEvent($article));
 
-        try {
-            // Находим всех модераторов
-            $moderators = User::whereHas('roles', function ($query) {
-                $query->where('slug', 'moderator');
-            })->get();
+        SendNewArticleNotification::dispatch($article)
+            ->delay(now()->addSeconds(5)) // Отложенная отправка на 5 секунд
+            ->onQueue('emails'); // Указываем конкретную очередь
 
-            // Отправляем каждому модератору
-            foreach ($moderators as $moderator) {
-                Mail::to($moderator->email)->send(new NewArticleNotification($article));
-            }
+        \Log::info("Job dispatched for article {$article->id}. Email will be sent via queue.");
 
-            \Log::info("Email отправлен модераторам о новой статье: {$article->title}");
+        // VeryLongJob::dispatch($article)
+        //     ->onQueue('long-running')
+        //     ->delay(now()->addSeconds(15));
 
-        } catch (\Exception $e) {
-            \Log::error('Ошибка отправки email: '.$e->getMessage());
-            // Не прерываем выполнение если email не отправился
-        }
+        // \Log::info("Very long job dispatched for article {$article->id}. Email will be sent via queue.");
 
         return redirect()->route('news.index')
             ->with('success', 'Статья успешно создана! Email отправлен модераторам.');
