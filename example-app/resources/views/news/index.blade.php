@@ -30,7 +30,7 @@
                     @endif
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $article->title }}</h5>
-                        <p class="card-text flex-grow-1">
+                        <p class="card-text grow">
                             {{ Str::limit($article->content, 150) }}
                         </p>
                         <div class="mt-auto">
@@ -79,7 +79,7 @@
                     </li>
                 @else
                     <li class="page-item">
-                        <a class="page-link" href="{{ $news->previousPageUrl() }}" rel="prev">&laquo;</a>
+                        <a class="page-link" href="{{ $articles->previousPageUrl() }}" rel="prev">&laquo;</a>
                     </li>
                 @endif
 

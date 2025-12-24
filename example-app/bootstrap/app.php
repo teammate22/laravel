@@ -22,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
+
+        $middleware->alias([
+            'log.article.view' => \App\Http\Middleware\LogArticleView::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

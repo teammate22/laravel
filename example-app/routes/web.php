@@ -18,7 +18,9 @@ Route::get('/gallery/{id}', [MainController::class, 'gallery'])->name('gallery')
 Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
 Route::get('/news/create', [ArticleController::class, 'create'])->name('news.create');
 Route::post('/news', [ArticleController::class, 'store'])->name('news.store');
-Route::get('/news/{article}', [ArticleController::class, 'show'])->name('news.show');
+Route::get('/news/{article}', [ArticleController::class, 'show'])
+    ->middleware('log.article.view')
+    ->name('news.show');
 Route::get('/news/{article}/edit', [ArticleController::class, 'edit'])->name('news.edit');
 Route::put('/news/{article}', [ArticleController::class, 'update'])->name('news.update');
 Route::delete('/news/{article}', [ArticleController::class, 'destroy'])->name('news.destroy');
